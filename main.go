@@ -26,7 +26,7 @@ type TodoList struct {
 var user = "root"
 var password = ""
 var subjs = []Subjects{}
-var todo_list = []TodoList{}
+var todoList = []TodoList{}
 
 /* ///////////////// HOME ///////////////// */
 func HomePage(w http.ResponseWriter, r *http.Request) {
@@ -44,10 +44,10 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 */
 func subjects_page(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("templates/subjects_page.html", "templates/header.html", "templates/footer.html")
-	// todo: refactor - Вынести в отдельную функцию
 	if err != nil {
 		panic(err)
 	}
+	// todo: refactor - Вынести в отдельную функцию
 	db, err := sql.Open("mysql", user+":"+password+"@tcp(127.0.0.1:3306)/diary")
 	if err != nil {
 		panic(err)
@@ -161,7 +161,7 @@ func subject_show(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	todo_list = []TodoList{}
+	todoList = []TodoList{}
 	for res.Next() {
 		var todo TodoList
 		err = res.Scan(&todo.Id, &todo.SubjectID, &todo.Todo, &todo.Do)
@@ -169,10 +169,10 @@ func subject_show(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 
-		todo_list = append(todo_list, todo)
+		todoList = append(todoList, todo)
 	}
 
-	t.ExecuteTemplate(w, "subject_show", todo_list)
+	t.ExecuteTemplate(w, "subject_show", todoList)
 }
 
 /* ///////////////// SAVE_TASK ///////////////// */
